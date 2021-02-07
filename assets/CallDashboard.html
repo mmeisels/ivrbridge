@@ -1,0 +1,155 @@
+<html>
+
+<head>
+      <style>
+table, td {
+  border: 1px solid black;
+}
+    .body {
+      height: 800px;
+    }
+
+    div.unstyledTable {
+      border: 4px solid #013D79;
+      text-align: center;
+    }
+
+    .divTable.unstyledTable .divTableCell,
+    .divTable.unstyledTable .divTableHead {
+      border: 0px solid #4F5E7A;
+      padding: 30px 0px;
+    }
+
+    .divTable.unstyledTable .divTableBody .divTableCell {
+      font-size: 10px;
+      font-weight: bold;
+      color: #233659;
+    }
+
+    .divTable.unstyledTable .divTableCellValues,
+    .divTable.unstyledTable .divTableHead {
+      border: 0px solid #4F5E7A;
+      padding: 30px 0px;
+    }
+
+    .divTable.unstyledTable .divTableBody .divTableCellValues {
+      font-size: 10px;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    .divTable.unstyledTable .divTableRow:nth-child(even) {
+      background: #4F5E7A;
+    }
+
+    /* DivTable.com */
+    .divTable {
+      display: table;
+    }
+
+    .divTableRow {
+      display: table-row;
+    }
+
+    .divTableHeading {
+      display: table-header-group;
+    }
+
+    .divTableCell,
+    .divTableHead {
+      display: table-cell;
+    }
+
+    .divTableHeading {
+      display: table-header-group;
+    }
+
+    .divTableFoot {
+      display: table-footer-group;
+    }
+
+    .divTableBody {
+      display: table-row-group;
+    }
+  </style>
+  <script>
+
+    var theUrl = '';
+
+    var HttpClient = function () {
+      this.get = function (aUrl, aCallback) {
+        var anHttpRequest = new XMLHttpRequest();
+        anHttpRequest.onreadystatechange = function () {
+          if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+            aCallback(anHttpRequest.responseText);
+        }
+        anHttpRequest.open("GET", aUrl, true);
+        anHttpRequest.send(null);
+      }
+    }
+
+   
+    function updateStats() {
+        console.log('Getting Stats');
+        var client1 = new HttpClient();
+        client1.get(`https://<<SERVICE NAME HERE>>.twil.io/callStats`, function (response) {
+        console.log(response);
+        callStats = JSON.parse(response);
+        console.log(callStats);
+        for (i=0; i< callStats.length; i++){
+            var mode = callStats[i].mode;
+            var phoneNumber = callStats[i].phoneNumber;
+            var calls = callStats[i].calls;
+            var duration = callStats[i].duration;
+
+            console.log(phoneNumber);
+            console.log(calls);
+            console.log(duration);
+            console.log('Creating Row');
+            var x = document.createElement("TR");
+            x.setAttribute("id", phoneNumber);
+            document.getElementById('devTable').appendChild(x);
+            var y0 = document.createElement("TD");
+            var y = document.createElement("TD");
+            var y1 = document.createElement("TD");
+            var y2 = document.createElement("TD");
+            var t0 = document.createTextNode(mode);
+            var t = document.createTextNode(phoneNumber);
+            var t1 = document.createTextNode(calls);
+            var t2 = document.createTextNode(duration);
+            y0.appendChild(t0);
+            y.appendChild(t);
+            y1.appendChild(t1);
+            y2.appendChild(t2);
+            document.getElementById(phoneNumber).appendChild(y0);
+            document.getElementById(phoneNumber).appendChild(y);
+            document.getElementById(phoneNumber).appendChild(y1);
+            document.getElementById(phoneNumber).appendChild(y2);
+        }
+    });
+        
+    }
+  </script>
+</head>
+
+<body onload="updateStats();">
+    Call Stats for IVR Bridge on Twilio
+    <table id="devTable">
+        <tr>
+            <td>
+                Environment
+            </td>
+            <td>
+                Phone Number
+            </td>
+            <td>
+                Number of Calls
+            </td>
+            <td>
+                Call Duration (secs)
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

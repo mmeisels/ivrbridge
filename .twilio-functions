@@ -1,0 +1,10 @@
+{
+	"projects": {
+		"XXXXX": {
+			"serviceSid": "XXXX",
+			"latestBuild": "XXX"
+		}
+	},
+	"serviceSid": "XXX",
+	"latestBuild": "XXXX"
+}
